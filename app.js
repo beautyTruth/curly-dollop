@@ -779,8 +779,8 @@ const BALL_SPIN = 0.2; // degree of ball deflection maximum per hit (0 is the lo
 const WALL = 0.02; // as a percentage of the shortest screen dimension
 
 // our sumptous colors
-const COLOR_BG = "darkred";
-const COLOR_WALL = "#A2D2FF";
+const COLOR_BG = "#3f0000";
+const COLOR_WALL = "#580000";
 const COLOR_PADDLE = "#FEE440";
 const COLOR_BALL = "#FEE440";
 
@@ -809,6 +809,7 @@ function playGame() {
   requestAnimationFrame(playGame);
 
   drawBackground();
+  drawWalls();
 }
 
 // ------ our DRAW BACKGROUND function
@@ -818,12 +819,26 @@ function drawBackground() {
   CTX.fillRect(0, 0, canvasEl.width, canvasEl.height);
 }
 
+// ------ our exceptional DRAW WALLS function
+
+function drawWalls() {
+  let halfWall = wall * 0.5;
+  CTX.lineWidth = wall;
+  CTX.strokeStyle = COLOR_WALL;
+  CTX.beginPath();
+  CTX.moveTo(halfWall, height);
+  CTX.lineTo(halfWall, halfWall);
+  CTX.lineTo(width - halfWall, halfWall);
+  CTX.lineTo(width - halfWall, height);
+  CTX.stroke();
+}
+
 // ---- the SET DIMENSIONS function
 
 function setDimensions() {
   height = window.innerHeight;
   width = window.innerWidth;
-  wall = wall * (height < width ? height : width);
+  wall = WALL * (height < width ? height : width);
   canvasEl.width = width;
   canvasEl.height = height;
 }
