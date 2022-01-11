@@ -770,3 +770,63 @@
 /* 
 my code below -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 */
+
+// our delicious GAME PARAMETERS
+const PADDLE_WIDTH = 0.1; // a percentage of the screen width
+const PADDLE_SPEED = 0.5; // a percentage of the screen width per second -- in this case, 2 sec to cross the screen
+const BALL_SPEED = 0.45; // percentage of the screen height per second
+const BALL_SPIN = 0.2; // degree of ball deflection maximum per hit (0 is the lowest, 1 is the highest)
+const WALL = 0.02; // as a percentage of the shortest screen dimension
+
+// our sumptous colors
+const COLOR_BG = "darkred";
+const COLOR_WALL = "#A2D2FF";
+const COLOR_PADDLE = "#FEE440";
+const COLOR_BALL = "#FEE440";
+
+// our gorgeous directions
+const DIRECTION = {
+  LEFT: 0,
+  RIGHT: 1,
+  STOP: 2,
+};
+
+// and now we will set up the canvas and the canvas's context
+let canvasEl = document.createElement("canvas");
+document.body.appendChild(canvasEl);
+const CTX = canvasEl.getContext("2d");
+
+// our much ballyhooed dimensions (which are also dynamic and responsive)
+let width, height, wall;
+
+// ----- the RESIZE (THE WINDOW) EVENT
+
+window.addEventListener("resize", setDimensions);
+
+// -=-=-=-=-=- GAME LOOP GAME LOOP GAME LOOP GAME LOOP -=-=-=-=-=-=- //
+
+function playGame() {
+  requestAnimationFrame(playGame);
+
+  drawBackground();
+}
+
+// ------ our DRAW BACKGROUND function
+
+function drawBackground() {
+  CTX.fillStyle = COLOR_BG;
+  CTX.fillRect(0, 0, canvasEl.width, canvasEl.height);
+}
+
+// ---- the SET DIMENSIONS function
+
+function setDimensions() {
+  height = window.innerHeight;
+  width = window.innerWidth;
+  wall = wall * (height < width ? height : width);
+  canvasEl.width = width;
+  canvasEl.height = height;
+}
+
+setDimensions();
+playGame();
