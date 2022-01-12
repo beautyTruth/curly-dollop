@@ -805,7 +805,7 @@ let paddle, ball, touchX;
 // arrow key events
 
 document.addEventListener("keydown", keyDown);
-document.addEventListener("keydown", keyUp);
+document.addEventListener("keyup", keyUp);
 
 // ----- the RESIZE (THE WINDOW) EVENT
 
@@ -902,6 +902,7 @@ function movePaddle(direction) {
 
 function newGame() {
   paddle = new Paddle(PADDLE_WIDTH, wall, PADDLE_SPEED);
+  ball = new Ball(wall, BALL_SPEED);
 }
 
 // ---- the SET DIMENSIONS function
@@ -925,6 +926,19 @@ function updatePaddle() {
     paddle.x = wall + paddle.w / 2;
   } else if (paddle.x > canvasEl.width - wall - paddle.w / 2) {
     paddle.x = canvasEl.width - wall - paddle.w / 2;
+  }
+}
+
+// ----- the BALL CLASS
+class Ball {
+  constructor(ballSize, ballSpeed) {
+    this.w = ballSize;
+    this.h = ballSize;
+    this.x = paddle.x;
+    this.y = paddle.y - paddle.h / 2 - this.h / 2;
+    this.speed = ballSpeed * height;
+    this.xV = 0;
+    this.yV = 0;
   }
 }
 
