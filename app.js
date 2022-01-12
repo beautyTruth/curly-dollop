@@ -802,6 +802,11 @@ let width, height, wall;
 // initialization of the paddle and ball classes
 let paddle, ball, touchX;
 
+// arrow key events
+
+document.addEventListener("keydown", keyDown);
+document.addEventListener("keydown", keyUp);
+
 // ----- the RESIZE (THE WINDOW) EVENT
 
 window.addEventListener("resize", setDimensions);
@@ -849,6 +854,44 @@ function drawWalls() {
   CTX.stroke();
 }
 
+// ---- ARROW KEYS functions
+
+function keyDown(e) {
+  switch (e.keyCode) {
+    case 37: // left arrow key which moves the paddle to the left
+      movePaddle(DIRECTION.LEFT);
+      break;
+    case 39: // right arrow key which moves the paddle to the right
+      movePaddle(DIRECTION.RIGHT);
+      break;
+  }
+}
+
+function keyUp(e) {
+  switch (e.keyCode) {
+    case 37:
+    case 39:
+      movePaddle(DIRECTION.STOP);
+      break;
+  }
+}
+
+// ----- the MOVE PADDLE function
+
+function movePaddle(direction) {
+  switch (direction) {
+    case DIRECTION.LEFT:
+      paddle.xV = -paddle.xV;
+      break;
+    case DIRECTION.RIGHT:
+      paddle.xV = paddle.xV;
+      break;
+    case DIRECTION.STOP:
+      paddle.xV = 0;
+      break;
+  }
+}
+
 // ---- our beautiful NEW GAME function (this is where we instantiate the paddle class)
 
 function newGame() {
@@ -863,6 +906,12 @@ function setDimensions() {
   wall = WALL * (height < width ? height : width);
   canvasEl.width = width;
   canvasEl.height = height;
+}
+
+// ----- UPDATE PADDLE position
+
+function updatePaddle() {
+  //
 }
 
 // ------ the PADDLE CLASS
