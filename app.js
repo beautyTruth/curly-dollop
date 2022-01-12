@@ -777,6 +777,7 @@ const PADDLE_SPEED = 0.5; // a percentage of the screen width per second -- in t
 const BALL_SPEED = 0.45; // percentage of the screen height per second
 const BALL_SPIN = 0.2; // degree of ball deflection maximum per hit (0 is the lowest, 1 is the highest)
 const WALL = 0.02; // as a percentage of the shortest screen dimension
+const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in degrees
 
 // our sumptous colors
 const COLOR_BG = "#3f0000";
@@ -829,6 +830,13 @@ function playGame() {
   drawBall();
 }
 
+// ----- the APPLY BALL SPEED function
+
+function applyBallSpeed(angle) {
+  ball.xV = ball.speed * Math.cos(angle);
+  ball.yV = -ball.speed * Math.sin(angle);
+}
+
 // ------ our DRAW BACKGROUND function
 
 function drawBackground() {
@@ -875,6 +883,7 @@ function keyDown(e) {
   switch (e.keyCode) {
     case 32: // spacebar -- the serving of the ball
       serveBall();
+      break;
     case 37: // left arrow key which moves the paddle to the left
       movePaddle(DIRECTION.LEFT);
       break;
@@ -944,8 +953,23 @@ function setDimensions() {
 // ----- UPDATE BALL
 
 function updateBall() {
+  // move the ball
   ball.x += (ball.xV / 1000) * 15;
   ball.y += (ball.yV / 1000) * 15;
+
+  // bounce off a wall
+  if (ball.x < wall + ball.w / 2) {
+    ball.x = wall + ball.w / 2;
+    ball.xV = -ball.xV;
+  } else if (ball.x > canvasEl.width - wall - ball.w / 2) {
+    ball.x = canvasEl.width - wall - ball.w / 2;
+    ball.xV = -ball.xV;
+  } else if (ball.y < wall + ball.h / 2) {
+    ball.y = wall + ball.h / 2;
+    ball.yV = -ball.yV;
+  }
+
+  // bounce off of the paddle
 }
 
 // ----- UPDATE PADDLE
