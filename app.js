@@ -799,6 +799,9 @@ const CTX = canvasEl.getContext("2d");
 // our much ballyhooed dimensions (which are also dynamic and responsive)
 let width, height, wall;
 
+// initialization of the paddle and ball classes
+let paddle, ball, touchX;
+
 // ----- the RESIZE (THE WINDOW) EVENT
 
 window.addEventListener("resize", setDimensions);
@@ -810,6 +813,7 @@ function playGame() {
 
   drawBackground();
   drawWalls();
+  drawPaddle();
 }
 
 // ------ our DRAW BACKGROUND function
@@ -817,6 +821,18 @@ function playGame() {
 function drawBackground() {
   CTX.fillStyle = COLOR_BG;
   CTX.fillRect(0, 0, canvasEl.width, canvasEl.height);
+}
+
+// ----- the courageous DRAW PADDLE function
+
+function drawPaddle() {
+  CTX.fillStyle = COLOR_PADDLE;
+  CTX.fillRect(
+    paddle.x - paddle.w * 0.5,
+    paddle.y - paddle.h * 0.5,
+    paddle.w,
+    paddle.h
+  );
 }
 
 // ------ our exceptional DRAW WALLS function
@@ -833,6 +849,12 @@ function drawWalls() {
   CTX.stroke();
 }
 
+// ---- our beautiful NEW GAME function (this is where we instantiate the paddle class)
+
+function newGame() {
+  paddle = new Paddle(PADDLE_WIDTH, wall, PADDLE_SPEED);
+}
+
 // ---- the SET DIMENSIONS function
 
 function setDimensions() {
@@ -843,5 +865,18 @@ function setDimensions() {
   canvasEl.height = height;
 }
 
+// ------ the PADDLE CLASS
+class Paddle {
+  constructor(paddleWidth, paddleHeight, paddleSpeed) {
+    this.w = paddleWidth * width;
+    this.h = paddleHeight / 2;
+    this.x = canvasEl.width / 2;
+    this.y = canvasEl.height - this.h * 3;
+    this.speed = paddleSpeed * width;
+    this.xV = 0;
+  }
+}
+
 setDimensions();
+newGame();
 playGame();
