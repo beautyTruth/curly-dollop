@@ -961,15 +961,27 @@ function updateBall() {
   if (ball.x < wall + ball.w / 2) {
     ball.x = wall + ball.w / 2;
     ball.xV = -ball.xV;
+    // spinBall();
   } else if (ball.x > canvasEl.width - wall - ball.w / 2) {
     ball.x = canvasEl.width - wall - ball.w / 2;
     ball.xV = -ball.xV;
+    // spinBall();
   } else if (ball.y < wall + ball.h / 2) {
     ball.y = wall + ball.h / 2;
     ball.yV = -ball.yV;
+    // spinBall();
   }
 
   // bounce off of the paddle
+  if (
+    ball.y > paddle.y - paddle.h * 0.5 - ball.h * 0.5 &&
+    ball.y < paddle.y + paddle.h * 0.5 &&
+    ball.x > paddle.x - paddle.w * 0.5 - ball.w * 0.5 &&
+    ball.x < paddle.x + paddle.w * 0.5 + ball.w * 0.5
+  ) {
+    ball.y = paddle.y - paddle.h * 0.5 - ball.h * 0.5;
+    ball.yV = -ball.yV;
+  }
 }
 
 // ----- UPDATE PADDLE
