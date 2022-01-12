@@ -819,12 +819,14 @@ function playGame() {
   // update functions
 
   updatePaddle();
+  updateBall();
 
   // draw functions
 
   drawBackground();
   drawWalls();
   drawPaddle();
+  drawBall();
 }
 
 // ------ our DRAW BACKGROUND function
@@ -832,6 +834,13 @@ function playGame() {
 function drawBackground() {
   CTX.fillStyle = COLOR_BG;
   CTX.fillRect(0, 0, canvasEl.width, canvasEl.height);
+}
+
+// ----- the DRAW BALL function
+
+function drawBall() {
+  CTX.fillStyle = COLOR_BALL;
+  CTX.fillRect(ball.x - ball.w / 2, ball.y - ball.h / 2, ball.w, ball.h);
 }
 
 // ----- the courageous DRAW PADDLE function
@@ -864,6 +873,8 @@ function drawWalls() {
 
 function keyDown(e) {
   switch (e.keyCode) {
+    case 32: // spacebar -- the serving of the ball
+      serveBall();
     case 37: // left arrow key which moves the paddle to the left
       movePaddle(DIRECTION.LEFT);
       break;
@@ -905,6 +916,21 @@ function newGame() {
   ball = new Ball(wall, BALL_SPEED);
 }
 
+// ----- the SERVE BALL function
+
+function serveBall() {
+  // check to see if the ball is already moving or has been served
+  if (ball.yV != 0) {
+    return false;
+  }
+
+  // randomized angle, not less than the minimum bounce angle
+  let minBounceAngle = (MIN_BOUNCE_ANGLE / 180) * Math.PI; // in radians
+  let range = Math.PI - minBounceAngle * 2;
+  let angle = Math.random() * range + minBounceAngle;
+  applyBallSpeed(angle);
+}
+
 // ---- the SET DIMENSIONS function
 
 function setDimensions() {
@@ -915,7 +941,14 @@ function setDimensions() {
   canvasEl.height = height;
 }
 
-// ----- UPDATE PADDLE position
+// ----- UPDATE BALL
+
+function updateBall() {
+  ball.x += (ball.xV / 1000) * 15;
+  ball.y += (ball.yV / 1000) * 15;
+}
+
+// ----- UPDATE PADDLE
 
 function updatePaddle() {
   // move the paddle
