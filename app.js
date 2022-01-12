@@ -816,6 +816,12 @@ window.addEventListener("resize", setDimensions);
 function playGame() {
   requestAnimationFrame(playGame);
 
+  // update functions
+
+  updatePaddle();
+
+  // draw functions
+
   drawBackground();
   drawWalls();
   drawPaddle();
@@ -834,7 +840,7 @@ function drawPaddle() {
   CTX.fillStyle = COLOR_PADDLE;
   CTX.fillRect(
     paddle.x - paddle.w * 0.5,
-    paddle.y - paddle.h * 0.5,
+    paddle.y - paddle.h / 2,
     paddle.w,
     paddle.h
   );
@@ -881,10 +887,10 @@ function keyUp(e) {
 function movePaddle(direction) {
   switch (direction) {
     case DIRECTION.LEFT:
-      paddle.xV = -paddle.xV;
+      paddle.xV = -paddle.speed;
       break;
     case DIRECTION.RIGHT:
-      paddle.xV = paddle.xV;
+      paddle.xV = paddle.speed;
       break;
     case DIRECTION.STOP:
       paddle.xV = 0;
@@ -911,7 +917,15 @@ function setDimensions() {
 // ----- UPDATE PADDLE position
 
 function updatePaddle() {
-  //
+  // move the paddle
+  paddle.x += (paddle.xV / 1000) * 20;
+
+  // wall collision detection for the paddle
+  if (paddle.x < wall + paddle.w / 2) {
+    paddle.x = wall + paddle.w / 2;
+  } else if (paddle.x > canvasEl.width - wall - paddle.w / 2) {
+    paddle.x = canvasEl.width - wall - paddle.w / 2;
+  }
 }
 
 // ------ the PADDLE CLASS
