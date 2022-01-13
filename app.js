@@ -940,6 +940,12 @@ function serveBall() {
   applyBallSpeed(angle);
 }
 
+// ----- OUT OF BOUNDS function
+
+function outOfBounds() {
+  newGame();
+}
+
 // ---- the SET DIMENSIONS function
 
 function setDimensions() {
@@ -981,6 +987,11 @@ function updateBall() {
   ) {
     ball.y = paddle.y - paddle.h * 0.5 - ball.h * 0.5;
     ball.yV = -ball.yV;
+  }
+
+  // ball moves below the paddle
+  if (ball.y > canvasEl.height) {
+    outOfBounds();
   }
 }
 
