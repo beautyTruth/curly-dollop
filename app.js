@@ -775,7 +775,7 @@ my code below -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 const PADDLE_WIDTH = 0.1; // a percentage of the screen width
 const PADDLE_SPEED = 0.5; // a percentage of the screen width per second -- in this case, 2 sec to cross the screen
 const BALL_SPEED = 0.45; // percentage of the screen height per second
-const BALL_SPIN = 0.2; // degree of ball deflection maximum per hit (0 is the lowest, 1 is the highest)
+const BALL_SPIN = 1; // degree of ball deflection maximum per hit (0 is the lowest, 1 is the highest)
 const WALL = 0.02; // as a percentage of the shortest screen dimension
 const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in degrees
 
@@ -833,6 +833,17 @@ function playGame() {
 // ----- the APPLY BALL SPEED function
 
 function applyBallSpeed(angle) {
+  // keep the angle between two limits (30 and 150 degrees)
+  console.log("angle default:", (angle / Math.PI) * 180);
+
+  if (angle < Math.PI / 6) {
+    angle = Math.PI / 6;
+  } else if (angle > (Math.PI * 5) / 6) {
+    angle = (Math.PI * 5) / 6;
+  }
+
+  console.log("angle output:", (angle / Math.PI) * 180);
+
   ball.xV = ball.speed * Math.cos(angle);
   ball.yV = -ball.speed * Math.sin(angle);
 }
@@ -981,12 +992,18 @@ function updateBall() {
   // bounce off of the paddle
   if (
     ball.y > paddle.y - paddle.h * 0.5 - ball.h * 0.5 &&
-    ball.y < paddle.y + paddle.h * 0.5 &&
+    ball.y < paddle.y + paddle.h * 0.5 + ball.h * 0.5 &&
     ball.x > paddle.x - paddle.w * 0.5 - ball.w * 0.5 &&
     ball.x < paddle.x + paddle.w * 0.5 + ball.w * 0.5
   ) {
     ball.y = paddle.y - paddle.h * 0.5 - ball.h * 0.5;
     ball.yV = -ball.yV;
+
+    // change the angle of bounce based off of the ball spin
+    // find the current angle
+    let angle = Math.atan2(-ball.yV, ball.xV);
+    angle += ((Math.random() * Math.PI) / 2 - Math.PI / 4) * BALL_SPIN;
+    applyBallSpeed(angle);
   }
 
   // ball moves below the paddle
