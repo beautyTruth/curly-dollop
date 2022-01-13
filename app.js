@@ -803,7 +803,14 @@ let width, height, wall;
 // initialization of the paddle and ball classes
 let paddle, ball, touchX;
 
-// arrow key events
+// TOUCH EVENTS
+
+canvasEl.addEventListener("touchcancel", touchCancel);
+canvasEl.addEventListener("touchend", touchEnd);
+canvasEl.addEventListener("touchmove", touchMove);
+canvasEl.addEventListener("touchstart", touchStart);
+
+// ARROW KEY EVENTS
 
 document.addEventListener("keydown", keyDown);
 document.addEventListener("keyup", keyUp);
@@ -834,7 +841,8 @@ function playGame() {
 
 function applyBallSpeed(angle) {
   // keep the angle between two limits (30 and 150 degrees)
-  console.log("angle default:", (angle / Math.PI) * 180);
+
+  // console.log("angle default:", (angle / Math.PI) * 180);
 
   if (angle < Math.PI / 6) {
     angle = Math.PI / 6;
@@ -842,7 +850,7 @@ function applyBallSpeed(angle) {
     angle = (Math.PI * 5) / 6;
   }
 
-  console.log("angle output:", (angle / Math.PI) * 180);
+  // console.log("angle output:", (angle / Math.PI) * 180);
 
   ball.xV = ball.speed * Math.cos(angle);
   ball.yV = -ball.speed * Math.sin(angle);
@@ -967,6 +975,34 @@ function setDimensions() {
   canvasEl.height = height;
 }
 
+// ----- TOUCH EVENTS functions
+
+// the TOUCH function
+function touch(x) {
+  if (!x) {
+    movePaddle(DIRECTION.STOP);
+  } else if (x > paddle.x) {
+    movePaddle(DIRECTION.RIGHT);
+  } else if (x < paddle.x) {
+    movePaddle(DIRECTION.LEFT);
+  }
+}
+
+function touchCancel(e) {
+  touch(null);
+}
+
+function touchEnd(e) {
+  touch(null);
+}
+
+function touchMove(e) {
+  touch(e.touches[0].clientX);
+}
+
+function touchStart(e) {
+  touch(e.touches[0].clientX);
+}
 // ----- UPDATE BALL
 
 function updateBall() {
