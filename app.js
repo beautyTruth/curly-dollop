@@ -779,7 +779,7 @@ const BALL_SPIN = 1; // degree of ball deflection maximum per hit (0 is the lowe
 const WALL = 0.02; // as a percentage of the shortest screen dimension
 const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in degrees
 const BRICK_ROWS = 8; // the starting number of brick rows
-const BRICK_COLS = 8; // the original number of brick columns
+const BRICK_COLS = 14; // the original number of brick columns
 const BRICK_GAP = 0.3; // the gap between the bricks as a fraction of the wall's width
 const MARGIN = 4; // the number of empty rows above the bricks (this is where the scoreboard will be)
 const MAX_LEVEL = 10; // the highest level possible in the game +2 rows of bricks per level
@@ -843,6 +843,7 @@ function playGame() {
   drawBackground();
   drawWalls();
   drawPaddle();
+  drawBricks();
   drawBall();
 }
 
@@ -880,6 +881,24 @@ function createBricks() {
   let totalSpaceX = width - wall * 2;
   let colW = (totalSpaceX - gap) / BRICK_COLS;
   let w = colW - gap;
+
+  // reset the bricks array
+  bricks = [];
+  let cols = BRICK_COLS;
+  let rows = BRICK_ROWS + level * 2;
+  let color, left, rank, rankHigh, score, spdMult, top;
+
+  rankHigh = rows / 2 - 1;
+  for (let i = 0; i < 0; i++) {
+    bricks[i] = [];
+    rank = Math.floor(i / 2);
+    color = getBrickColor(rank, rankHigh);
+    top = wall + (MARGIN + i) * rowH;
+    for (let j = 0; j < cols; j++) {
+      left = wall + gap + j * colW;
+      bricks[i][j] = new Brick(left, top, w, h, color);
+    }
+  }
 }
 
 // ------ our DRAW BACKGROUND function
@@ -894,6 +913,16 @@ function drawBackground() {
 function drawBall() {
   CTX.fillStyle = COLOR_BALL;
   CTX.fillRect(ball.x - ball.w / 2, ball.y - ball.h / 2, ball.w, ball.h);
+}
+
+// ----- the DRAW BRICKS function
+function drawBricks() {
+  for (let row of bricks) {
+    for (let brick of row) {
+      CTX.fillStyle = brick.color;
+      CTX.fillRect(brick.left, brick.top, brick.w, brick.h);
+    }
+  }
 }
 
 // ----- the courageous DRAW PADDLE function
@@ -921,6 +950,8 @@ function drawWalls() {
   CTX.lineTo(width - halfWall, height);
   CTX.stroke();
 }
+
+// ----- GET BRICK COLORS
 
 // ---- ARROW KEYS functions
 
@@ -1123,6 +1154,21 @@ class Ball {
     this.speed = ballSpeed * height;
     this.xV = 0;
     this.yV = 0;
+  }
+}
+
+// ----- the BRICK CLASS
+class Brick {
+  constructor(left, top, w, h, color, score, spdMult) {
+    this.w = w;
+    this.h = h;
+    this.left = left;
+    this.top = top;
+    this.bottom = top + h;
+    this.right = left + w;
+    this.color = color;
+    // this.score = score;
+    // this.spdMult = spdMult;
   }
 }
 
