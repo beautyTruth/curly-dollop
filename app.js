@@ -974,6 +974,8 @@ function setDimensions() {
   wall = WALL * (height < width ? height : width);
   canvasEl.width = width;
   canvasEl.height = height;
+
+  newGame();
 }
 
 // ----- TOUCH EVENTS functions
@@ -1053,6 +1055,11 @@ function updateBall() {
   if (ball.y > canvasEl.height) {
     outOfBounds();
   }
+
+  // move the ball with the paddle when it is on the paddle
+  if (ball.yV == 0) {
+    ball.x = paddle.x;
+  }
 }
 
 // ----- UPDATE PADDLE
@@ -1105,5 +1112,5 @@ class Paddle {
 }
 
 setDimensions();
-newGame();
+
 playGame();
