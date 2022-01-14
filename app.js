@@ -807,8 +807,8 @@ let paddle, ball, touchX;
 
 canvasEl.addEventListener("touchcancel", touchCancel);
 canvasEl.addEventListener("touchend", touchEnd);
-canvasEl.addEventListener("touchmove", touchMove);
-canvasEl.addEventListener("touchstart", touchStart);
+canvasEl.addEventListener("touchmove", touchMove, { passive: true });
+canvasEl.addEventListener("touchstart", touchStart, { passive: true });
 
 // ARROW KEY EVENTS
 
@@ -957,6 +957,7 @@ function serveBall() {
   let range = Math.PI - minBounceAngle * 2;
   let angle = Math.random() * range + minBounceAngle;
   applyBallSpeed(angle);
+  return true;
 }
 
 // ----- OUT OF BOUNDS function
@@ -978,30 +979,36 @@ function setDimensions() {
 // ----- TOUCH EVENTS functions
 
 // the TOUCH function
-function touch(x) {
-  if (!x) {
-    movePaddle(DIRECTION.STOP);
-  } else if (x > paddle.x) {
-    movePaddle(DIRECTION.RIGHT);
-  } else if (x < paddle.x) {
-    movePaddle(DIRECTION.LEFT);
-  }
+// function touch(x) {
+//   if (!x) {
+//     movePaddle(DIRECTION.STOP);
+//   } else if (x > paddle.x) {
+//     movePaddle(DIRECTION.RIGHT);
+//   } else if (x < paddle.x) {
+//     movePaddle(DIRECTION.LEFT);
+//   }
+// }
+
+function touchCancel() {
+  touchX = null;
+  movePaddle(DIRECTION.STOP);
 }
 
-function touchCancel(e) {
-  touch(null);
-}
-
-function touchEnd(e) {
-  touch(null);
+function touchEnd() {
+  touchX = null;
+  movePaddle(DIRECTION.STOP);
 }
 
 function touchMove(e) {
-  touch(e.touches[0].clientX);
+  touchX = e.touches[0].clientX;
 }
 
 function touchStart(e) {
-  touch(e.touches[0].clientX);
+  if (serveBall()) {
+    console.log("you got served yo");
+    return;
+  }
+  touchX = e.touches[0].clientX;
 }
 // ----- UPDATE BALL
 
@@ -1051,6 +1058,16 @@ function updateBall() {
 // ----- UPDATE PADDLE
 
 function updatePaddle() {
+  // move the paddle with our touch
+  if (touchX != null) {
+    if (touchX > paddle.x + wall) {
+      movePaddle(DIRECTION.RIGHT);
+    } else if (touchX < paddle.x - wall) {
+      movePaddle(DIRECTION.LEFT);
+    } else {
+      movePaddle(DIRECTION.STOP);
+    }
+  }
   // move the paddle
   paddle.x += (paddle.xV / 1000) * 20;
 
