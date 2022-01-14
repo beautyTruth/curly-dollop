@@ -1212,3 +1212,5 @@ class Paddle {
 setDimensions();
 
 playGame();
+
+// pay attention!!!
