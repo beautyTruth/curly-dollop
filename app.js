@@ -889,7 +889,7 @@ function createBricks() {
   let color, left, rank, rankHigh, score, spdMult, top;
 
   rankHigh = rows / 2 - 1;
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < rows; i++) {
     bricks[i] = [];
     rank = Math.floor(i / 2);
     color = getBrickColor(rank, rankHigh);
