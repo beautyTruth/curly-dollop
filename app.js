@@ -969,7 +969,7 @@ function getBrickColor(rank, highestRank) {
 
   // yellow to green (reduce the red)
   else {
-    r = (255 * (1 - fraction)) / 0.66;
+    r = (255 * (1 - fraction)) / 0.67;
     g = 255;
   }
 
