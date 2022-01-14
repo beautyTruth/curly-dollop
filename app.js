@@ -874,7 +874,7 @@ function createBricks() {
   let totalSpaceY = maxY - minY;
   let totalRows = MARGIN + BRICK_ROWS + MAX_LEVEL * 2;
   let rowH = (totalSpaceY / totalRows) * 0.9;
-  let gap = wall + BRICK_GAP * 0.9;
+  let gap = wall * BRICK_GAP * 0.9;
   let h = rowH - gap;
 
   // col dimensions
@@ -953,6 +953,29 @@ function drawWalls() {
 
 // ----- GET BRICK COLORS
 
+function getBrickColor(rank, highestRank) {
+  // red = 0, orange = 0.33, yellow = 0.67, green = 1
+  let fraction = rank / highestRank;
+  let r,
+    g,
+    b = 0;
+
+  // red to orange to yellow the (increase of the green)
+
+  if (fraction <= 0.67) {
+    r = 255;
+    g = (255 * fraction) / 0.67;
+  }
+
+  // yellow to green (reduce the red)
+  else {
+    r = (255 * (1 - fraction)) / 0.66;
+    g = 255;
+  }
+
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 // ---- ARROW KEYS functions
 
 function keyDown(e) {
@@ -1001,6 +1024,8 @@ function newGame() {
   ball = new Ball(wall, BALL_SPEED);
 
   level = 0;
+
+  createBricks();
 }
 
 // ----- the SERVE BALL function
