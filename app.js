@@ -778,6 +778,11 @@ const BALL_SPEED = 0.45; // percentage of the screen height per second
 const BALL_SPIN = 1; // degree of ball deflection maximum per hit (0 is the lowest, 1 is the highest)
 const WALL = 0.02; // as a percentage of the shortest screen dimension
 const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in degrees
+const BRICK_ROWS = 8; // the starting number of brick rows
+const BRICK_COLS = 8; // the original number of brick columns
+const BRICK_GAP = 0.3; // the gap between the bricks as a fraction of the wall's width
+const MARGIN = 4; // the number of empty rows above the bricks (this is where the scoreboard will be)
+const MAX_LEVEL = 10; // the highest level possible in the game +2 rows of bricks per level
 
 // our sumptous colors
 const COLOR_BG = "#3f0000";
@@ -797,11 +802,15 @@ let canvasEl = document.createElement("canvas");
 document.body.appendChild(canvasEl);
 const CTX = canvasEl.getContext("2d");
 
-// our much ballyhooed dimensions (which are also dynamic and responsive)
+// our DIMENSIONS (which are also dynamic and responsive)
 let width, height, wall;
 
-// initialization of the paddle and ball classes
-let paddle, ball, touchX;
+// initialization of the PADDLE, BRICK, and BALL classes (and the touchX let)
+let paddle,
+  ball,
+  touchX,
+  bricks = [],
+  level;
 
 // TOUCH EVENTS
 
@@ -854,6 +863,23 @@ function applyBallSpeed(angle) {
 
   ball.xV = ball.speed * Math.cos(angle);
   ball.yV = -ball.speed * Math.sin(angle);
+}
+
+// ----- CREATE BRICKS function
+function createBricks() {
+  // row dimensions
+  let minY = wall;
+  let maxY = ball.y - ball.h * 3.5;
+  let totalSpaceY = maxY - minY;
+  let totalRows = MARGIN + BRICK_ROWS + MAX_LEVEL * 2;
+  let rowH = (totalSpaceY / totalRows) * 0.9;
+  let gap = wall + BRICK_GAP * 0.9;
+  let h = rowH - gap;
+
+  // col dimensions
+  let totalSpaceX = width - wall * 2;
+  let colW = (totalSpaceX - gap) / BRICK_COLS;
+  let w = colW - gap;
 }
 
 // ------ our DRAW BACKGROUND function
@@ -942,6 +968,8 @@ function movePaddle(direction) {
 function newGame() {
   paddle = new Paddle(PADDLE_WIDTH, wall, PADDLE_SPEED);
   ball = new Ball(wall, BALL_SPEED);
+
+  level = 0;
 }
 
 // ----- the SERVE BALL function
@@ -980,7 +1008,7 @@ function setDimensions() {
 
 // ----- TOUCH EVENTS functions
 
-// the TOUCH function
+// the TOUCH function // UNUSED, for reference
 // function touch(x) {
 //   if (!x) {
 //     movePaddle(DIRECTION.STOP);
@@ -1007,7 +1035,6 @@ function touchMove(e) {
 
 function touchStart(e) {
   if (serveBall()) {
-    console.log("you got served yo");
     return;
   }
   touchX = e.touches[0].clientX;
