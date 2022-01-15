@@ -777,12 +777,12 @@ const PADDLE_SPEED = 0.5; // a percentage of the screen width per second -- in t
 const BALL_SPEED = 0.45; // percentage of the screen height per second
 const BALL_SPIN = 1; // degree of ball deflection maximum per hit (0 is the lowest, 1 is the highest)
 const WALL = 0.02; // as a percentage of the shortest screen dimension
-const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in degrees
 const BRICK_ROWS = 8; // the starting number of brick rows
 const BRICK_COLS = 14; // the original number of brick columns
 const BRICK_GAP = 0.3; // the gap between the bricks as a fraction of the wall's width
 const MARGIN = 4; // the number of empty rows above the bricks (this is where the scoreboard will be)
 const MAX_LEVEL = 10; // the highest level possible in the game +2 rows of bricks per level
+const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in degrees
 
 // our sumptous colors
 const COLOR_BG = "#3f0000";
@@ -851,18 +851,6 @@ function playGame() {
 // ----- the APPLY BALL SPEED function
 
 function applyBallSpeed(angle) {
-  // keep the angle between two limits (30 and 150 degrees)
-
-  // console.log("angle default:", (angle / Math.PI) * 180);
-
-  if (angle < Math.PI / 6) {
-    angle = Math.PI / 6;
-  } else if (angle > (Math.PI * 5) / 6) {
-    angle = (Math.PI * 5) / 6;
-  }
-
-  // console.log("angle output:", (angle / Math.PI) * 180);
-
   ball.xV = ball.speed * Math.cos(angle);
   ball.yV = -ball.speed * Math.sin(angle);
 }
@@ -1067,6 +1055,50 @@ function setDimensions() {
   newGame();
 }
 
+// ----- SPIN BALL function
+
+function spinBall() {
+  let upwards = ball.yV < 0;
+
+  // change the angle of bounce based off of the ball spin
+  // find the current angle
+  let angle = Math.atan2(-ball.yV, ball.xV);
+  angle += ((Math.random() * Math.PI) / 2 - Math.PI / 4) * BALL_SPIN;
+
+  //unused concept code -- hard coded, unnacceptable
+
+  // keep the angle between two limits (30 and 150 degrees)
+
+  // console.log("angle default:", (angle / Math.PI) * 180);
+
+  // if (angle < Math.PI / 6) {
+  //   angle = Math.PI / 6;
+  // } else if (angle > (Math.PI * 5) / 6) {
+  //   angle = (Math.PI * 5) / 6;
+  // }
+
+  // console.log("angle output:", (angle / Math.PI) * 180);
+
+  //END unused concept code
+
+  let minBounceAngle = (MIN_BOUNCE_ANGLE / 180) * Math.PI;
+  if (upwards) {
+    if (angle < minBounceAngle) {
+      angle = minBounceAngle;
+    } else if (angle > Math.PI - minBounceAngle) {
+      angle = Math.PI - minBounceAngle;
+    } else {
+      if (angle > -minBounceAngle) {
+        angle = -minBounceAngle;
+      } else if (angle < -Math.PI + minBounceAngle) {
+        angle = -Math.PI + minBounceAngle;
+      }
+    }
+  }
+
+  applyBallSpeed(angle);
+}
+
 // ----- TOUCH EVENTS functions
 
 // the TOUCH function // UNUSED, for reference
@@ -1111,15 +1143,15 @@ function updateBall() {
   if (ball.x < wall + ball.w / 2) {
     ball.x = wall + ball.w / 2;
     ball.xV = -ball.xV;
-    // spinBall();
+    spinBall();
   } else if (ball.x > canvasEl.width - wall - ball.w / 2) {
     ball.x = canvasEl.width - wall - ball.w / 2;
     ball.xV = -ball.xV;
-    // spinBall();
+    spinBall();
   } else if (ball.y < wall + ball.h / 2) {
     ball.y = wall + ball.h / 2;
     ball.yV = -ball.yV;
-    // spinBall();
+    spinBall();
   }
 
   // bounce off of the paddle
@@ -1132,11 +1164,7 @@ function updateBall() {
     ball.y = paddle.y - paddle.h * 0.5 - ball.h * 0.5;
     ball.yV = -ball.yV;
 
-    // change the angle of bounce based off of the ball spin
-    // find the current angle
-    let angle = Math.atan2(-ball.yV, ball.xV);
-    angle += ((Math.random() * Math.PI) / 2 - Math.PI / 4) * BALL_SPIN;
-    applyBallSpeed(angle);
+    spinBall();
   }
 
   // ball moves below the paddle
@@ -1166,6 +1194,7 @@ function updateBricks() {
 
         bricks[i][j] = null;
         ball.yV = -ball.yV;
+        spinBall();
         break OUTER;
       }
     }
