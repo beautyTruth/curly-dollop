@@ -1087,12 +1087,12 @@ function spinBall() {
       angle = minBounceAngle;
     } else if (angle > Math.PI - minBounceAngle) {
       angle = Math.PI - minBounceAngle;
-    } else {
-      if (angle > -minBounceAngle) {
-        angle = -minBounceAngle;
-      } else if (angle < -Math.PI + minBounceAngle) {
-        angle = -Math.PI + minBounceAngle;
-      }
+    }
+  } else {
+    if (angle > -minBounceAngle) {
+      angle = -minBounceAngle;
+    } else if (angle < -Math.PI + minBounceAngle) {
+      angle = -Math.PI + minBounceAngle;
     }
   }
 
