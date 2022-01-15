@@ -775,7 +775,7 @@ my code below -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 const PADDLE_WIDTH = 0.1; // a percentage of the screen width
 const PADDLE_SPEED = 0.5; // a percentage of the screen width per second -- in this case, 2 sec to cross the screen
 const BALL_SPEED = 0.45; // percentage of the screen height per second
-const BALL_SPIN = 1; // degree of ball deflection maximum per hit (0 is the lowest, 1 is the highest)
+const BALL_SPIN = 0.2; // degree of ball deflection maximum per hit (0 is the lowest, 1 is the highest)
 const WALL = 0.02; // as a percentage of the shortest screen dimension
 const BRICK_ROWS = 8; // the starting number of brick rows
 const BRICK_COLS = 14; // the original number of brick columns
@@ -951,12 +951,12 @@ function getBrickColor(rank, highestRank) {
   let fraction = rank / highestRank;
   let r,
     g,
-    b = 0;
+    b = 255;
 
   // red to orange to yellow the (increase of the green)
 
   if (fraction <= 0.67) {
-    r = 255;
+    r = 123;
     g = (255 * fraction) / 0.67;
   }
 
