@@ -920,6 +920,10 @@ function drawBall() {
 function drawBricks() {
   for (let row of bricks) {
     for (let brick of row) {
+      if (brick == null) {
+        continue;
+      }
+
       CTX.fillStyle = brick.color;
       CTX.fillRect(brick.left, brick.top, brick.w, brick.h);
     }
@@ -1161,6 +1165,7 @@ function updateBricks() {
         }
 
         bricks[i][j] = null;
+        ball.yV = -ball.yV;
         break OUTER;
       }
     }
@@ -1222,6 +1227,13 @@ class Brick {
       let ballLeft = ball.x - ball.w / 2;
       let ballRight = ball.x + ball.w / 2;
       let ballTop = ball.y - ball.h / 2;
+
+      return (
+        this.left < ballRight &&
+        ballLeft < this.right &&
+        this.bottom > ballTop &&
+        ballBottom > this.top
+      );
     };
   }
 }
