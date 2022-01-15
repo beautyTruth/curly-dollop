@@ -837,6 +837,7 @@ function playGame() {
 
   updatePaddle();
   updateBall();
+  updateBricks();
 
   // draw functions
 
@@ -1145,6 +1146,27 @@ function updateBall() {
   }
 }
 
+// ----- UPDATE BRICKS
+
+function updateBricks() {
+  // check for a ball collision with the bricks
+  OUTER: for (let i = 0; i < bricks.length; i++) {
+    for (let j = 0; j < BRICK_COLS; j++) {
+      if (bricks[i][j] != null && bricks[i][j].intersect(ball)) {
+        if (ball.yV < 0) {
+          // an upwards hit then a downwards hit
+          ball.y = bricks[i][j].bottom + ball.h * 0.5;
+        } else {
+          ball.y = bricks[i][j].top - ball.h * 0.5;
+        }
+
+        bricks[i][j] = null;
+        break OUTER;
+      }
+    }
+  }
+}
+
 // ----- UPDATE PADDLE
 
 function updatePaddle() {
@@ -1192,8 +1214,15 @@ class Brick {
     this.bottom = top + h;
     this.right = left + w;
     this.color = color;
-    // this.score = score;
-    // this.spdMult = spdMult;
+    this.score = score;
+    this.spdMult = spdMult;
+
+    this.intersect = (ball) => {
+      let ballBottom = ball.y + ball.h / 2;
+      let ballLeft = ball.x - ball.w / 2;
+      let ballRight = ball.x + ball.w / 2;
+      let ballTop = ball.y - ball.h / 2;
+    };
   }
 }
 
