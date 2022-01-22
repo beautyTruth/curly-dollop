@@ -975,8 +975,8 @@ function drawText() {
   CTX.textAlign = "center";
   CTX.fillText(TEXT_LIVES, x2, yLabel, maxWidth2);
   CTX.fillText(TEXT_LEVEL, x3, yLabel, maxWidth3);
-  CTX.fillText(TEXT_SCORE_HIGH, x4, yLabel, maxWidth4);
   CTX.textAlign = "right";
+  CTX.fillText(TEXT_SCORE_HIGH, x4, yLabel, maxWidth4);
 
   // filling in the values
   CTX.font = `${textSize}px ${TEXT_FONT}`;
@@ -985,8 +985,8 @@ function drawText() {
   CTX.textAlign = "center";
   CTX.fillText(`${lives}/${GAME_LIVES}`, x2, yValue, maxWidth2);
   CTX.fillText(level, x3, yValue, maxWidth3);
-  CTX.fillText(scoreHigh, x4, yValue, maxWidth4);
   CTX.textAlign = "right";
+  CTX.fillText(scoreHigh, x4, yValue, maxWidth4);
 }
 
 // ------ our exceptional DRAW WALLS function
