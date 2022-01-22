@@ -859,7 +859,7 @@ function playGame() {
   drawWalls();
   drawPaddle();
   drawBricks();
-  // drawText();
+  drawText();
   drawBall();
 }
 
@@ -946,6 +946,47 @@ function drawPaddle() {
     paddle.w,
     paddle.h
   );
+}
+
+// ----- the DRAW TEXT function
+
+function drawText() {
+  CTX.fillStyle = COLOR_TEXT;
+
+  // the dimensions
+  let labelSize = textSize * 0.5;
+  let margin = wall * 2;
+  let maxWidth = width - margin * 2;
+  let maxWidth1 = maxWidth * 0.27; // width of the text in column 1
+  let maxWidth2 = maxWidth * 0.2; // width of the text in column 2
+  let maxWidth3 = maxWidth * 0.2; // width of the text in column 3
+  let maxWidth4 = maxWidth * 0.27; // width of the text in column 4
+  let x1 = margin; // the position of column 1
+  let x2 = width * 0.4; // the position of column 2
+  let x3 = width * 0.6; // the position of column 3
+  let x4 = width - margin; // the position of column 4
+  let yLabel = wall + labelSize;
+  let yValue = yLabel + textSize * 0.9;
+
+  // drawing the actual labels
+  CTX.font = `${labelSize}px ${TEXT_FONT}`;
+  CTX.textAlign = "left";
+  CTX.fillText(TEXT_SCORE, x1, yLabel, maxWidth1);
+  CTX.textAlign = "center";
+  CTX.fillText(TEXT_LIVES, x2, yLabel, maxWidth2);
+  CTX.fillText(TEXT_LEVEL, x3, yLabel, maxWidth3);
+  CTX.fillText(TEXT_SCORE_HIGH, x4, yLabel, maxWidth4);
+  CTX.textAlign = "right";
+
+  // filling in the values
+  CTX.font = `${textSize}px ${TEXT_FONT}`;
+  CTX.textAlign = "left";
+  CTX.fillText(score, x1, yValue, maxWidth1);
+  CTX.textAlign = "center";
+  CTX.fillText(`${lives}/${GAME_LIVES}`, x2, yValue, maxWidth2);
+  CTX.fillText(level, x3, yValue, maxWidth3);
+  CTX.fillText(scoreHigh, x4, yValue, maxWidth4);
+  CTX.textAlign = "right";
 }
 
 // ------ our exceptional DRAW WALLS function
