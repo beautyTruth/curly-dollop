@@ -789,9 +789,9 @@ const KEY_SCORE = "HighScore";
 // our sumptous colors
 const COLOR_BG = "#3f0000";
 const COLOR_WALL = "#580000";
-const COLOR_PADDLE = "#FEE440";
-const COLOR_BALL = "#FEE440";
-const COLOR_TEXT = "antiquewhite";
+const COLOR_PADDLE = "#bde0ff";
+const COLOR_BALL = "#bde0ff";
+const COLOR_TEXT = "#bde0ff";
 
 // text properties
 const TEXT_FONT = "sans-serif";
@@ -899,6 +899,7 @@ function createBricks() {
   for (let i = 0; i < rows; i++) {
     bricks[i] = [];
     rank = Math.floor(i / 2);
+    score = (rankHigh - rank) * 2 + 1;
     color = getBrickColor(rank, rankHigh);
     top = wall + (MARGIN + i) * rowH;
     for (let j = 0; j < cols; j++) {
@@ -1010,12 +1011,12 @@ function getBrickColor(rank, highestRank) {
   let fraction = rank / highestRank;
   let r,
     g,
-    b = 255;
+    b = 0;
 
   // red to orange to yellow the (increase of the green)
 
   if (fraction <= 0.67) {
-    r = 123;
+    r = 255;
     g = (255 * fraction) / 0.67;
   }
 
@@ -1270,6 +1271,7 @@ function updateBricks() {
   OUTER: for (let i = 0; i < bricks.length; i++) {
     for (let j = 0; j < BRICK_COLS; j++) {
       if (bricks[i][j] != null && bricks[i][j].intersect(ball)) {
+        updateScore(bricks[i][j].score);
         if (ball.yV < 0) {
           // an upwards hit then a downwards hit
           ball.y = bricks[i][j].bottom + ball.h * 0.5;
@@ -1307,6 +1309,18 @@ function updatePaddle() {
     paddle.x = wall + paddle.w / 2;
   } else if (paddle.x > canvasEl.width - wall - paddle.w / 2) {
     paddle.x = canvasEl.width - wall - paddle.w / 2;
+  }
+}
+
+// ----- the UPDATE SCORE function
+
+function updateScore(brickScore) {
+  score += brickScore;
+
+  // check for a high score
+  if (score > scoreHigh) {
+    scoreHigh = score;
+    localStorage.setItem(KEY_SCORE, scoreHigh);
   }
 }
 
