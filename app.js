@@ -783,12 +783,24 @@ const BRICK_GAP = 0.3; // the gap between the bricks as a fraction of the wall's
 const MARGIN = 4; // the number of empty rows above the bricks (this is where the scoreboard will be)
 const MAX_LEVEL = 10; // the highest level possible in the game +2 rows of bricks per level
 const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in degrees
+const GAME_LIVES = 3; // the number of testicles that a cyclops has
+const KEY_SCORE = "HighScore";
 
 // our sumptous colors
 const COLOR_BG = "#3f0000";
 const COLOR_WALL = "#580000";
 const COLOR_PADDLE = "#FEE440";
 const COLOR_BALL = "#FEE440";
+const COLOR_TEXT = "antiquewhite";
+
+// text properties
+const TEXT_FONT = "sans-serif";
+const TEXT_LEVEL = "Level";
+const TEXT_LIVES = "Lives";
+const TEXT_SCORE = "Score";
+const TEXT_SCORE_HIGH = "BEST";
+const TEXT_GAME_OVER = "YOU SUCK 💀";
+const TEXT_WIN = "YOU WON 🦧";
 
 // our gorgeous directions
 const DIRECTION = {
@@ -808,9 +820,11 @@ let width, height, wall;
 // initialization of the PADDLE, BRICK, and BALL classes (and the touchX let)
 let paddle,
   ball,
-  touchX,
-  bricks = [],
-  level;
+  bricks = [];
+
+let gameOver, pupExtension, pupSticky, pupSuper, win;
+let level, lives, score, scoreHich;
+let numBricks, textSize, touchX;
 
 // TOUCH EVENTS
 
@@ -1021,6 +1035,8 @@ function newGame() {
   createBricks();
 }
 
+// ----- NEW BALL function
+
 // ----- the SERVE BALL function
 
 function serveBall() {
@@ -1051,6 +1067,8 @@ function setDimensions() {
   wall = WALL * (height < width ? height : width);
   canvasEl.width = width;
   canvasEl.height = height;
+
+  CTX.textBaseline = "middle";
 
   newGame();
 }
