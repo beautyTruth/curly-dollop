@@ -904,7 +904,7 @@ function createBricks() {
     top = wall + (MARGIN + i) * rowH;
     for (let j = 0; j < cols; j++) {
       left = wall + gap + j * colW;
-      bricks[i][j] = new Brick(left, top, w, h, color);
+      bricks[i][j] = new Brick(left, top, w, h, color, score, spdMult);
     }
   }
 }
@@ -1108,7 +1108,13 @@ function newLevel() {
 // ----- OUT OF BOUNDS function
 
 function outOfBounds() {
-  newGame();
+  // newGame();
+  lives--;
+  if (lives == 0) {
+    gameOver = true;
+  }
+
+  newBall();
 }
 
 // ----- the SERVE BALL function
