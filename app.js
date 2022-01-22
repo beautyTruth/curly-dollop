@@ -823,7 +823,7 @@ let paddle,
   bricks = [];
 
 let gameOver, pupExtension, pupSticky, pupSuper, win;
-let level, lives, score, scoreHich;
+let level, lives, score, scoreHigh;
 let numBricks, textSize, touchX;
 
 // TOUCH EVENTS
@@ -859,6 +859,7 @@ function playGame() {
   drawWalls();
   drawPaddle();
   drawBricks();
+  // drawText();
   drawBall();
 }
 
@@ -879,6 +880,9 @@ function createBricks() {
   let rowH = (totalSpaceY / totalRows) * 0.9;
   let gap = wall * BRICK_GAP * 0.9;
   let h = rowH - gap;
+
+  // the text size
+  textSize = rowH * MARGIN * 0.45;
 
   // col dimensions
   let totalSpaceX = width - wall * 2;
@@ -1031,7 +1035,7 @@ function newBall() {
   ball = new Ball(wall, BALL_SPEED);
 }
 
-// ---- our beautiful NEW GAME function (this is where we instantiate the paddle class)
+// ---- our beautiful NEW GAME function =-=-=-=-=-=-=-=-=-=-=-
 
 function newGame() {
   level = 0;
@@ -1039,6 +1043,14 @@ function newGame() {
   score = 0;
   win = false;
   lives = GAME_LIVES;
+
+  // get the best score from local storage
+  let scoreStr = localStorage.getItem(KEY_SCORE);
+  if (scoreStr == null) {
+    scoreHigh = 0;
+  } else {
+    scoreHigh = parseInt(scoreStr);
+  }
 
   newLevel();
 }
