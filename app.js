@@ -1024,18 +1024,38 @@ function movePaddle(direction) {
   }
 }
 
+// ----- NEW BALL function
+
+function newBall() {
+  paddle = new Paddle(PADDLE_WIDTH, wall, PADDLE_SPEED);
+  ball = new Ball(wall, BALL_SPEED);
+}
+
 // ---- our beautiful NEW GAME function (this is where we instantiate the paddle class)
 
 function newGame() {
-  paddle = new Paddle(PADDLE_WIDTH, wall, PADDLE_SPEED);
-  ball = new Ball(wall, BALL_SPEED);
-
   level = 0;
+  gameOver = false;
+  score = 0;
+  win = false;
+  lives = GAME_LIVES;
 
+  newLevel();
+}
+
+// ---- NEW LEVEL function
+
+function newLevel() {
+  touchX = null;
+  newBall();
   createBricks();
 }
 
-// ----- NEW BALL function
+// ----- OUT OF BOUNDS function
+
+function outOfBounds() {
+  newGame();
+}
 
 // ----- the SERVE BALL function
 
@@ -1051,12 +1071,6 @@ function serveBall() {
   let angle = Math.random() * range + minBounceAngle;
   applyBallSpeed(angle);
   return true;
-}
-
-// ----- OUT OF BOUNDS function
-
-function outOfBounds() {
-  newGame();
 }
 
 // ---- the SET DIMENSIONS function
