@@ -847,11 +847,14 @@ window.addEventListener("resize", setDimensions);
 function playGame() {
   requestAnimationFrame(playGame);
 
-  // update functions
+  // the GAME OVER logic
 
-  updatePaddle();
-  updateBall();
-  updateBricks();
+  if (!gameOver) {
+    // UPDATE functions
+    updatePaddle();
+    updateBall();
+    updateBricks();
+  }
 
   // draw functions
 
@@ -988,6 +991,14 @@ function drawText() {
   CTX.fillText(level, x3, yValue, maxWidth3);
   CTX.textAlign = "right";
   CTX.fillText(scoreHigh, x4, yValue, maxWidth4);
+
+  // drawing the GAME OVER text
+  if (gameOver) {
+    let text = win ? TEXT_WIN : TEXT_GAME_OVER;
+    CTX.font = `${textSize * 2}px ${TEXT_FONT}`;
+    CTX.textAlign = "center";
+    CTX.fillText(text, width / 2, paddle.y - textSize * 4, maxWidth);
+  }
 }
 
 // ------ our exceptional DRAW WALLS function
