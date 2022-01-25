@@ -873,12 +873,14 @@ function playGame() {
     updatePaddle();
     updateBall();
     updateBricks();
+    updatePups();
   }
 
   // draw functions
 
   drawBackground();
   drawWalls();
+  drawPups();
   drawPaddle();
   drawBricks();
   drawText();
@@ -978,6 +980,20 @@ function drawPaddle() {
     paddle.w,
     paddle.h
   );
+}
+
+// ----- the DRAW PUPS function
+
+function drawPups() {
+  CTX.lineWidth = wall * 0.2;
+  for (let pup of pups) {
+    CTX.fillStyle = pup.type.color;
+    CTX.strokeStyle = pup.type.color;
+    CTX.strokeRect(pup.x - pup.w * 0.5, pup.y - pup.h * 0.5, pup.w, pup.h);
+    CTX.font = `bold ${pup.h}px ${TEXT_FONT}`;
+    CTX.textAlign = "center";
+    CTX.fillText(pup.type.symbol, pup.x, pup.y);
+  }
 }
 
 // ----- the DRAW TEXT function
@@ -1352,6 +1368,7 @@ function updateBricks() {
           let pSize = bricks[i][j].w * 0.4;
           let pKeys = Object.keys(PupType);
           let pKey = pKeys[Math.floor(Math.random() * pKeys.length)];
+          pups.push(new PowerUp(px, py, pSize, PupType[pKey]));
         }
 
         bricks[i][j] = null;
