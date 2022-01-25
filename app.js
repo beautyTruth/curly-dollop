@@ -835,7 +835,7 @@ let audWall = new Audio("sounds/wall.m4a");
 // our DIMENSIONS (which are also dynamic and responsive)
 let width, height, wall;
 
-// initialization of the PADDLE, BRICK, and BALL classes (and the touchX let)
+// initialization of the PADDLE, BRICK, PUPs and BALL classes (and the touchX let)
 let paddle,
   ball,
   bricks = [],
@@ -985,7 +985,7 @@ function drawPaddle() {
 // ----- the DRAW PUPS function
 
 function drawPups() {
-  CTX.lineWidth = wall * 0.4;
+  CTX.lineWidth = wall * 0.2;
   for (let pup of pups) {
     CTX.fillStyle = pup.type.color;
     CTX.strokeStyle = pup.type.color;
@@ -1417,6 +1417,17 @@ function updatePaddle() {
     paddle.x = wall + paddle.w / 2;
   } else if (paddle.x > canvasEl.width - wall - paddle.w / 2) {
     paddle.x = canvasEl.width - wall - paddle.w / 2;
+  }
+
+  // collecting the POWER UPS
+  for (i = pups.length - 1; i >= 0; i--) {
+    if (
+      pups[i].x + pups[i].w * 0.5 > paddle.x - paddle.w * 0.5 &&
+      pups[i].x - pups[i].w * 0.5 < paddle.x + paddle.w * 0.5 &&
+      pups[i].y + pups[i].h * 0.5 > paddle.y - paddle.h * 0.5 &&
+      pups[i].y - pups[i].h * 0.5 < paddle.y + paddle.h
+    ) {
+    }
   }
 }
 
