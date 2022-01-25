@@ -774,17 +774,18 @@ my code below -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // our delicious GAME PARAMETERS
 const PADDLE_WIDTH = 0.1; // a percentage of the screen width
 const PADDLE_SPEED = 0.5; // a percentage of the screen width per second -- in this case, 2 sec to cross the screen
-const BALL_SPEED = 0.9; // percentage of the screen height per second
+const BALL_SPEED = 0.45; // percentage of the screen height per second
 const BALL_SPIN = 0.2; // degree of ball deflection maximum per hit (0 is the lowest, 1 is the highest)
 const WALL = 0.02; // as a percentage of the shortest screen dimension
 const BRICK_ROWS = 8; // the starting number of brick rows
-const BRICK_COLS = 1; // the original number of brick columns
+const BRICK_COLS = 14; // the original number of brick columns
 const BRICK_GAP = 0.3; // the gap between the bricks as a fraction of the wall's width
 const MARGIN = 4; // the number of empty rows above the bricks (this is where the scoreboard will be)
 const MAX_LEVEL = 10; // the highest level possible in the game +2 rows of bricks per level
-const MIN_BOUNCE_ANGLE = 90; // the minimum bounce angle from horizontal 0 in degrees
+const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in degrees
 const GAME_LIVES = 3; // the number of testicles that a cyclops has
 const KEY_SCORE = "HighScore";
+const BALL_SPEED_MAX = 2; // this is a multiple of the starting speed of .45
 
 // our sumptous colors
 const COLOR_BG = "#3f0000";
@@ -906,6 +907,13 @@ function createBricks() {
     rank = Math.floor(i / 2);
     score = (rankHigh - rank) * 2 + 1;
     color = getBrickColor(rank, rankHigh);
+
+    /*
+    fyi -- red 0, orange 1, yellow 2, green 3 and rankHigh 3
+    */
+
+    spdMult = 1 + ((rankHigh - rank) / rankHigh) * (BALL_SPEED_MAX - 1);
+
     top = wall + (MARGIN + i) * rowH;
     for (let j = 0; j < cols; j++) {
       left = wall + gap + j * colW;
@@ -1298,6 +1306,7 @@ function updateBricks() {
     for (let j = 0; j < BRICK_COLS; j++) {
       if (bricks[i][j] != null && bricks[i][j].intersect(ball)) {
         updateScore(bricks[i][j].score);
+        ball.setSpeed(bricks[i][j].spdMult);
         if (ball.yV < 0) {
           // an upwards hit then a downwards hit
           ball.y = bricks[i][j].bottom + ball.h * 0.5;
@@ -1377,6 +1386,10 @@ class Ball {
     this.xV = 0;
     this.yV = 0;
   }
+  setSpeed = (spdMult) => {
+    this.speed = Math.max(this.speed, BALL_SPEED * height * spdMult);
+    console.log(`speed = ${this.speed}`);
+  };
 }
 
 // ----- the BRICK CLASS
