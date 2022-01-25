@@ -815,11 +815,18 @@ const DIRECTION = {
 
 // the POWER UP types object
 
+// const PupType = {
+//   EXTENSION: { color: "aliceblue", symbol: "🍆" },
+//   LIFE: { color: "papayawhip", symbol: "🦧" },
+//   STICKY: { color: "peachpuff", symbol: "🍯" },
+//   SUPER: { color: "#E4FAF0", symbol: "🍒" },
+// };
+
 const PupType = {
-  EXTENSION: { color: "aliceblue", symbol: "🍆" },
-  LIFE: { color: "papayawhip", symbol: "🦧" },
-  STICKY: { color: "peachpuff", symbol: "🍯" },
-  SUPER: { color: "#E4FAF0", symbol: "🍒" },
+  EXTENSION: { color: "aliceblue", symbol: "e" },
+  LIFE: { color: "papayawhip", symbol: "v" },
+  STICKY: { color: "peachpuff", symbol: "c" },
+  SUPER: { color: "#E4FAF0", symbol: "b" },
 };
 
 // and now we will set up the canvas and the canvas's context
@@ -985,7 +992,7 @@ function drawPaddle() {
 // ----- the DRAW PUPS function
 
 function drawPups() {
-  CTX.lineWidth = wall * 0.2;
+  CTX.lineWidth = wall * 0.4;
   for (let pup of pups) {
     CTX.fillStyle = pup.type.color;
     CTX.strokeStyle = pup.type.color;
@@ -1417,6 +1424,19 @@ function updatePaddle() {
     paddle.x = wall + paddle.w / 2;
   } else if (paddle.x > canvasEl.width - wall - paddle.w / 2) {
     paddle.x = canvasEl.width - wall - paddle.w / 2;
+  }
+}
+
+// ----- the UPDATE PUPS function
+
+function updatePups() {
+  for (let i = pups.length - 1; i >= 0; i--) {
+    pups[i].y += (pups[i].yV / 1000) * 20;
+
+    // deletion of the PUPS when they go below the paddle
+    if (pups[i].y - pups[i].h * 0.5 > height) {
+      pups.splice(i, 1);
+    }
   }
 }
 
