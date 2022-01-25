@@ -815,6 +815,11 @@ let canvasEl = document.createElement("canvas");
 document.body.appendChild(canvasEl);
 const CTX = canvasEl.getContext("2d");
 
+let audBrick = new Audio("sounds/brick.m4a");
+let audPaddle = new Audio("sounds/paddle.m4a");
+let audPowerup = new Audio("sounds/powerup.m4a");
+let audWall = new Audio("sounds/wall.m4a");
+
 // our DIMENSIONS (which are also dynamic and responsive)
 let width, height, wall;
 
@@ -1155,6 +1160,7 @@ function serveBall() {
   let range = Math.PI - minBounceAngle * 2;
   let angle = Math.random() * range + minBounceAngle;
   applyBallSpeed(angle);
+  audPaddle.play();
   return true;
 }
 
@@ -1263,14 +1269,17 @@ function updateBall() {
   if (ball.x < wall + ball.w / 2) {
     ball.x = wall + ball.w / 2;
     ball.xV = -ball.xV;
+    audWall.play();
     spinBall();
   } else if (ball.x > canvasEl.width - wall - ball.w / 2) {
     ball.x = canvasEl.width - wall - ball.w / 2;
     ball.xV = -ball.xV;
+    audWall.play();
     spinBall();
   } else if (ball.y < wall + ball.h / 2) {
     ball.y = wall + ball.h / 2;
     ball.yV = -ball.yV;
+    audWall.play();
     spinBall();
   }
 
@@ -1283,7 +1292,7 @@ function updateBall() {
   ) {
     ball.y = paddle.y - paddle.h * 0.5 - ball.h * 0.5;
     ball.yV = -ball.yV;
-
+    audPaddle.play();
     spinBall();
   }
 
@@ -1318,7 +1327,7 @@ function updateBricks() {
         ball.yV = -ball.yV;
 
         numBricks--;
-
+        audBrick.play();
         spinBall();
         break OUTER;
       }
