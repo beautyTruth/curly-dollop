@@ -1427,6 +1427,38 @@ function updatePaddle() {
       pups[i].y + pups[i].h * 0.5 > paddle.y - paddle.h * 0.5 &&
       pups[i].y - pups[i].h * 0.5 < paddle.y + paddle.h
     ) {
+      switch (pups[i].type) {
+        case PupType.EXTENSION:
+          if (pupExtension) {
+            score += PUP_BONUS;
+          } else {
+            pupExtension = true;
+            paddle.w *= 2;
+          }
+          break;
+
+        case PupType.LIFE:
+          lives++;
+          break;
+
+        case PupType.STICKY:
+          if (pupSticky) {
+            score += PUP_BONUS;
+          } else {
+            pupSticky = true;
+          }
+          break;
+
+        case PupType.SUPER:
+          if (pupSuper) {
+            score += PUP_BONUS;
+          } else {
+            pupSuper = true;
+          }
+          break;
+      }
+      pups.splice(i, 1);
+      audPowerup.play();
     }
   }
 }
