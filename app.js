@@ -1344,6 +1344,16 @@ function updateBricks() {
           ball.y = bricks[i][j].top - ball.h * 0.5;
         }
 
+        // CREATING the POWER UPS
+
+        if (Math.random() <= PUP_CHANCE) {
+          let px = bricks[i][j].left + bricks[i][j].w / 2; // pup horizontal location
+          let py = bricks[i][j].top + bricks[i][j].h / 2; // pup vertical location
+          let pSize = bricks[i][j].w * 0.4;
+          let pKeys = Object.keys(PupType);
+          let pKey = pKeys[Math.floor(Math.random() * pKeys.length)];
+        }
+
         bricks[i][j] = null;
         ball.yV = -ball.yV;
 
