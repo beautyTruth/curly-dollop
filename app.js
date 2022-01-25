@@ -786,6 +786,9 @@ const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in de
 const GAME_LIVES = 3; // the number of testicles that a cyclops has
 const KEY_SCORE = "HighScore";
 const BALL_SPEED_MAX = 2; // this is a multiple of the starting speed of .45
+const PUP_CHANCE = 1; // the probability of getting a random powerup upon hitting a brick .00 to.1
+const PUP_SPEED = 0.15;
+const PUP_BONUS = 50;
 
 // our sumptous colors
 const COLOR_BG = "#3f0000";
@@ -801,7 +804,7 @@ const TEXT_LIVES = "Lives";
 const TEXT_SCORE = "Score";
 const TEXT_SCORE_HIGH = "BEST";
 const TEXT_GAME_OVER = "YOU SUCK 💀";
-const TEXT_WIN = "YOU WON 🦧";
+const TEXT_WIN = "FU MANCHU IS FREE 🦧";
 
 // our gorgeous directions
 const DIRECTION = {
