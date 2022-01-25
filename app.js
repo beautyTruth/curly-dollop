@@ -813,6 +813,15 @@ const DIRECTION = {
   STOP: 2,
 };
 
+// the POWER UP types object
+
+const PupType = {
+  EXTENSION: { color: "aliceblue", symbol: "🍆" },
+  LIFE: { color: "papayawhip", symbol: "🦧" },
+  STICKY: { color: "peachpuff", symbol: "🍯" },
+  SUPER: { color: "#E4FAF0", symbol: "🍒" },
+};
+
 // and now we will set up the canvas and the canvas's context
 let canvasEl = document.createElement("canvas");
 document.body.appendChild(canvasEl);
@@ -829,7 +838,8 @@ let width, height, wall;
 // initialization of the PADDLE, BRICK, and BALL classes (and the touchX let)
 let paddle,
   ball,
-  bricks = [];
+  bricks = [],
+  pups = [];
 
 let gameOver, pupExtension, pupSticky, pupSuper, win;
 let level, lives, score, scoreHigh;
@@ -1106,6 +1116,11 @@ function movePaddle(direction) {
 // ----- NEW BALL function
 
 function newBall() {
+  // lets reset the powerups after each game
+  pupExtension = false;
+  pupSticky = false;
+  pupSuper = false;
+
   paddle = new Paddle(PADDLE_WIDTH, wall, PADDLE_SPEED);
   ball = new Ball(wall, BALL_SPEED);
 }
@@ -1133,6 +1148,9 @@ function newGame() {
 // ---- NEW LEVEL function
 
 function newLevel() {
+  // reset the PUPS to an empty array
+  pups = [];
+
   touchX = null;
   newBall();
   createBricks();
@@ -1442,6 +1460,17 @@ class Paddle {
     this.y = canvasEl.height - this.h * 3;
     this.speed = paddleSpeed * width;
     this.xV = 0;
+  }
+}
+
+// the POWER UP class
+class PowerUp {
+  constructor(x, y, size, type) {
+    this.w = size;
+    this.h = size;
+    this.x = x;
+    this.y = y;
+    this.yV = PUP_SPEED * height;
   }
 }
 
