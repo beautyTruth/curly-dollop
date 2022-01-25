@@ -1046,6 +1046,10 @@ function keyDown(e) {
   switch (e.keyCode) {
     case 32: // spacebar -- the serving of the ball
       serveBall();
+
+      if (gameOver) {
+        newGame();
+      }
       break;
     case 37: // left arrow key which moves the paddle to the left
       movePaddle(DIRECTION.LEFT);
@@ -1231,6 +1235,9 @@ function touchMove(e) {
 
 function touchStart(e) {
   if (serveBall()) {
+    if (gameOver) {
+      newGame();
+    }
     return;
   }
   touchX = e.touches[0].clientX;
