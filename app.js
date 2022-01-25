@@ -786,7 +786,7 @@ const MIN_BOUNCE_ANGLE = 30; // the minimum bounce angle from horizontal 0 in de
 const GAME_LIVES = 3; // the number of testicles that a cyclops has
 const KEY_SCORE = "HighScore";
 const BALL_SPEED_MAX = 2; // this is a multiple of the starting speed of .45
-const PUP_CHANCE = 1; // the probability of getting a random powerup upon hitting a brick .00 to.1
+const PUP_CHANCE = 0.9; // the probability of getting a random powerup upon hitting a brick .00 to .1
 const PUP_SPEED = 0.15;
 const PUP_BONUS = 50;
 
@@ -815,18 +815,11 @@ const DIRECTION = {
 
 // the POWER UP types object
 
-// const PupType = {
-//   EXTENSION: { color: "aliceblue", symbol: "🍆" },
-//   LIFE: { color: "papayawhip", symbol: "🦧" },
-//   STICKY: { color: "peachpuff", symbol: "🍯" },
-//   SUPER: { color: "#E4FAF0", symbol: "🍒" },
-// };
-
 const PupType = {
-  EXTENSION: { color: "aliceblue", symbol: "e" },
-  LIFE: { color: "papayawhip", symbol: "v" },
-  STICKY: { color: "peachpuff", symbol: "c" },
-  SUPER: { color: "#E4FAF0", symbol: "b" },
+  EXTENSION: { color: "aliceblue", symbol: "🍆" },
+  LIFE: { color: "papayawhip", symbol: "🦧" },
+  STICKY: { color: "peachpuff", symbol: "🍯" },
+  SUPER: { color: "#E4FAF0", symbol: "🧨" },
 };
 
 // and now we will set up the canvas and the canvas's context
@@ -996,7 +989,7 @@ function drawPups() {
   for (let pup of pups) {
     CTX.fillStyle = pup.type.color;
     CTX.strokeStyle = pup.type.color;
-    CTX.strokeRect(pup.x - pup.w * 0.5, pup.y - pup.h * 0.5, pup.w, pup.h);
+    // CTX.strokeRect(pup.x - pup.w * 0.5, pup.y - pup.h * 0.5, pup.w, pup.h);
     CTX.font = `bold ${pup.h}px ${TEXT_FONT}`;
     CTX.textAlign = "center";
     CTX.fillText(pup.type.symbol, pup.x, pup.y);
@@ -1517,6 +1510,7 @@ class PowerUp {
     this.h = size;
     this.x = x;
     this.y = y;
+    this.type = type;
     this.yV = PUP_SPEED * height;
   }
 }
